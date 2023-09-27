@@ -14,6 +14,7 @@ piCam.preview_configuration.main.format="RGB888"
 #jwc seems to work noton UsbCam  C720 nor C922 but on CsiCam:Lanzo RpiClone
 ###jwc y but only 1-2 fps: piCam.preview_configuration.controls.FrameRate=30
 ###jwc y 22-24fps, try 90: piCam.preview_configuration.controls.FrameRate=60
+# jwc 23-0927-1200 TYJ fps rose to 25-28fps :)+, even with GUI, VsCode, SSH: 95tasks, 122threads :)+
 piCam.preview_configuration.controls.FrameRate=90
 piCam.preview_configuration.align()
 
