@@ -145,9 +145,21 @@ while True:
     
     ###jwc 23-0928-2300 wow 8-10 fps: frame = imutils.resize(frame, height=600, width=400)
     ###jwc y 15-25fps: frame = imutils.resize(frame, height=300, width=200)
-    ###jwc y frame = imutils.resize(frame, height=450, width=300)
+    ###jwc y 20-25fps: frame = imutils.resize(frame, height=450, width=300)
+    
+    # jwc imx219
+    #
     ###jwc yy jumped from 20-25fps to 48fps >> since > 30fps very real-time but small screen :)+
-    frame = imutils.resize(frame, height=225, width=150)
+    ###jwc y 35fps: frame = imutils.resize(frame, height=225, width=150)
+
+    # jwc imx708 non-wide
+    #
+    ###jwc y now w/ imx708 non_wide: 35fps: frame = imutils.resize(frame, height=225, width=150)
+    ###jwc y 28fps: frame = imutils.resize(frame, height=450, width=300)
+    ###jwc y 29 fps: frame = imutils.reszie(frame, height=400, width=300)
+    ###jwc y 25 fps: frame = imutils.resize(frame, height=375, width=300)
+    ###jwc y 33fps :)+
+    frame = imutils.resize(frame, height=350, width=250)
     
     # detect ArUco markers in the input frame
     ###jwc o (corners, ids, rejected) = cv2.aruco.detectMarkers(frame, arucoDict, parameters=arucoParams)
