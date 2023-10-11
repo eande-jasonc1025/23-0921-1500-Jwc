@@ -63,6 +63,9 @@ def runExample():
         if IMU.dataReady():
             IMU.getAgmt() # read all axis and temp from sensor, note this also updates all instance variables
 
+            # jwc Since Rotational Direction is reversed, must inverse the polarity so that clockwise, angle ^.
+            IMU.myRaw *= -1
+             
             botHeadingNow_Degrees = 180 * (math.atan2(IMU.myRaw, IMU.mxRaw)/math.pi)
             if botHeadingNow_Degrees < 0:
                     botHeadingNow_Degrees+=360
