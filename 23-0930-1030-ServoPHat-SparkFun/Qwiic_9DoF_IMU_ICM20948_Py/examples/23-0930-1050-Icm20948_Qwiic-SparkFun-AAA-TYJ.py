@@ -44,6 +44,9 @@ import qwiic_icm20948
 import time
 import sys
 
+import math
+
+
 def runExample():
 
     print("\nSparkFun 9DoF ICM-20948 Sensor  Example 1\n")
@@ -59,6 +62,12 @@ def runExample():
     while True:
         if IMU.dataReady():
             IMU.getAgmt() # read all axis and temp from sensor, note this also updates all instance variables
+
+            botHeadingNow_Degrees = 180 * (math.atan2(IMU.myRaw, IMU.mxRaw)/math.pi)
+            if botHeadingNow_Degrees < 0:
+                    botHeadingNow_Degrees+=360
+
+
             ###jwc y TYJ: print(\
             ###jwc y TYJ:         '{: 06d}'.format(IMU.axRaw)\
             ###jwc y TYJ: , '\t', '{: 06d}'.format(IMU.ayRaw)\
@@ -71,16 +80,18 @@ def runExample():
             ###jwc y TYJ: , '\t', '{: 06d}'.format(IMU.mzRaw)\
             ###jwc y TYJ: )
             print(\
-                    'aX: {: 06d}'.format(IMU.axRaw)\
-            , '\t', 'aY: {: 06d}'.format(IMU.ayRaw)\
-            , '\t', 'aZ: {: 06d}'.format(IMU.azRaw)\
-            , '\t', 'gX: {: 06d}'.format(IMU.gxRaw)\
-            , '\t', 'gY: {: 06d}'.format(IMU.gyRaw)\
-            , '\t', 'gZ: {: 06d}'.format(IMU.gzRaw)\
-            , '\t', 'mX: {: 06d}'.format(IMU.mxRaw)\
-            , '\t', 'mY: {: 06d}'.format(IMU.myRaw)\
-            , '\t', 'mZ: {: 06d}'.format(IMU.mzRaw)\
+                    'aX: {:06d}'.format(IMU.axRaw)\
+            , '\t', 'aY: {:06d}'.format(IMU.ayRaw)\
+            , '\t', 'aZ: {:06d}'.format(IMU.azRaw)\
+            , '\t', 'gX: {:06d}'.format(IMU.gxRaw)\
+            , '\t', 'gY: {:06d}'.format(IMU.gyRaw)\
+            , '\t', 'gZ: {:06d}'.format(IMU.gzRaw)\
+            , '\t', 'mX: {:06d}'.format(IMU.mxRaw)\
+            , '\t', 'mY: {:06d}'.format(IMU.myRaw)\
+            , '\t', 'mZ: {:06d}'.format(IMU.mzRaw)\
+            , '\t', 'Hd: {:.2f}'.format(botHeadingNow_Degrees)\
             )
+                        
             ###jwc o time.sleep(0.03)
             time.sleep(0.1)
         else:
