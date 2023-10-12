@@ -57,6 +57,13 @@ ACC_LPF_FACTOR = 0.1
 
 def runExample():
     
+    oldXMagRawValue = 0
+    oldYMagRawValue = 0
+    oldZMagRawValue = 0
+    oldXAccRawValue = 0
+    oldYAccRawValue = 0
+    oldZAccRawValue = 0
+    
     # jwc 'sys.argv[2] is 'mode_Int'
     #
     if len(sys.argv) >= 2:
@@ -80,9 +87,27 @@ def runExample():
         if IMU.dataReady():
             IMU.getAgmt() # read all axis and temp from sensor, note this also updates all instance variables
 
+            # Apply low pass filter to reduce noise
+            #
+            IMU.mxRaw =  IMU.mxRaw  * MAG_LPF_FACTOR + oldXMagRawValue*(1 - MAG_LPF_FACTOR);
+            IMU.myRaw =  IMU.myRaw  * MAG_LPF_FACTOR + oldYMagRawValue*(1 - MAG_LPF_FACTOR);
+            IMU.mzRaw =  IMU.mzRaw  * MAG_LPF_FACTOR + oldZMagRawValue*(1 - MAG_LPF_FACTOR);
+            IMU.axRaw =  IMU.axRaw  * ACC_LPF_FACTOR + oldXAccRawValue*(1 - ACC_LPF_FACTOR);
+            IMU.ayRaw =  IMU.ayRaw  * ACC_LPF_FACTOR + oldYAccRawValue*(1 - ACC_LPF_FACTOR);
+            IMU.azRaw =  IMU.azRaw  * ACC_LPF_FACTOR + oldZAccRawValue*(1 - ACC_LPF_FACTOR);
+            #
+            oldXMagRawValue = IMU.mxRaw
+            oldYMagRawValue = IMU.myRaw
+            oldZMagRawValue = IMU.mzRaw
+            oldXAccRawValue = IMU.axRaw
+            oldYAccRawValue = IMU.ayRaw
+            oldZAccRawValue = IMU.azRaw
+
             # jwc Since Rotational Direction is reversed, must inverse the polarity so that clockwise, angle ^.
+            # jwc DOESN'T MATTER WHICH IS NEGATIVE-INVERTED, BUT JUST ONE NOT BOTH
+            ###jwc n IMU.mxRaw *= -1
             IMU.mxRaw *= -1
-            IMU.myRaw *= -1
+            ###jwc y IMU.myRaw *= -1
              
             botHeadingNow_Degrees = 180 * (math.atan2(IMU.myRaw, IMU.mxRaw)/math.pi)
             if botHeadingNow_Degrees < 0:
@@ -148,16 +173,15 @@ def runExample():
             ###jwc y TYJ: )
             print(\
                     'Node: {:01d}'.format(mode_Int)\
-            , '\t', 'aX: {:06d}'.format(IMU.axRaw)\
-            , '\t', 'aX: {:06d}'.format(IMU.axRaw)\
-            , '\t', 'aY: {:06d}'.format(IMU.ayRaw)\
-            , '\t', 'aZ: {:06d}'.format(IMU.azRaw)\
-            , '\t', 'gX: {:06d}'.format(IMU.gxRaw)\
-            , '\t', 'gY: {:06d}'.format(IMU.gyRaw)\
-            , '\t', 'gZ: {:06d}'.format(IMU.gzRaw)\
-            , '\t', 'mX: {:06d}'.format(IMU.mxRaw)\
-            , '\t', 'mY: {:06d}'.format(IMU.myRaw)\
-            , '\t', 'mZ: {:06d}'.format(IMU.mzRaw)\
+            ##jwc y , '\t', 'aX: {:06d}'.format(IMU.axRaw)\
+            ##jwc y , '\t', 'aY: {:06d}'.format(IMU.ayRaw)\
+            ##jwc y , '\t', 'aZ: {:06d}'.format(IMU.azRaw)\
+            ##jwc y , '\t', 'gX: {:06d}'.format(IMU.gxRaw)\
+            ##jwc y , '\t', 'gY: {:06d}'.format(IMU.gyRaw)\
+            ##jwc y , '\t', 'gZ: {:06d}'.format(IMU.gzRaw)\
+            ##jwc y , '\t', 'mX: {:06d}'.format(IMU.mxRaw)\
+            ##jwc y , '\t', 'mY: {:06d}'.format(IMU.myRaw)\
+            ##jwc y , '\t', 'mZ: {:06d}'.format(IMU.mzRaw)\
             , '\t', 'Hd: {:.2f}'.format(botHeadingNow_Degrees)\
             , '\t', 'Hd: {:.2f}'.format(botHeadingNow_TiltCompensated_Degrees)\
             )
